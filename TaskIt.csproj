@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="IntegrationTests\**" />
+    <Compile Remove="Tests\**" />
+    <Compile Remove="UnitTests\**" />
+    <Content Remove="IntegrationTests\**" />
+    <Content Remove="Tests\**" />
+    <Content Remove="UnitTests\**" />
+    <EmbeddedResource Remove="IntegrationTests\**" />
+    <EmbeddedResource Remove="Tests\**" />
+    <EmbeddedResource Remove="UnitTests\**" />
+    <None Remove="IntegrationTests\**" />
+    <None Remove="Tests\**" />
+    <None Remove="UnitTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+</Project>
