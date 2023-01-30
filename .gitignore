@@ -1,0 +1,17 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/IntegrationTests/obj
+/obj
+/TaskIt.Api/obj
+/TaskIt.Core/obj
+/UnitTests/obj
+/.vs
+/IntegrationTests/bin/Debug/net7.0
+/TaskIt.Api/bin/Debug/net7.0
+*.user
+/TaskIt.Core/bin/Debug/net7.0
+/TaskIt.Infrastructure/bin/Debug/net7.0
+/TaskIt.Infrastructure/obj
+/UnitTests/bin/Debug/net7.0
