@@ -1,4 +1,6 @@
 using TaskIt.Core;
+using TaskIt.Core.RepositoryInterfaces;
+using TaskIt.Infrastructure;
 using UnitTests;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<ITaskService, TaskService>();
+builder.Services.AddSingleton<ITaskRepository, TaskFakeRepository>();
 
 var app = builder.Build();
 

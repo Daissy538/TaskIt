@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace IntegrationTests
+namespace TaskIt.Api.Dtos.Input
 {
     public class TaskCreateRequestDto
     {

@@ -2,7 +2,7 @@
 
 namespace TaskIt.Core.Request.Builder
 {
-    public class CreateTaskRequestBuilder
+    public class CreateTaskRequestBuilder: IBuilder<CreateTaskRequest>
     {
         private string? Title;
         private DateTime? EndDate;

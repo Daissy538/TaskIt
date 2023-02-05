@@ -1,4 +1,5 @@
 ﻿using TaskIt.Core;
+using TaskIt.Core.Entities;
 using TaskIt.Core.Exceptions;
 using TaskIt.Core.Request;
 
@@ -6,6 +7,7 @@ namespace UnitTests
 {
     public class TaskService: ITaskService
     {
+
         public TaskService()
         {
         }
@@ -14,7 +16,9 @@ namespace UnitTests
         {
             this.VerifyEndDate(createTaskRequest);
 
-            return new TaskItem(createTaskRequest.Title, createTaskRequest.EndDate);
+            var item = new TaskItem(createTaskRequest.Title, createTaskRequest.EndDate);
+
+            return item;
         }
 
         private void VerifyEndDate(CreateTaskRequest createTaskRequest)

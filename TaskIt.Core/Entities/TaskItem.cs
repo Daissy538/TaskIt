@@ -1,7 +1,12 @@
-﻿namespace UnitTests
+﻿namespace TaskIt.Core.Entities
 {
     public class TaskItem
     {
+        public TaskItem()
+        {
+
+        }
+
         public TaskItem(string title)
         {
             Title = title;
@@ -13,7 +18,8 @@
             EndDate = endDate;
         }
 
-        public string Title { get; }
-        public DateTime? EndDate { get; }
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }
