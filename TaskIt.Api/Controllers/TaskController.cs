@@ -46,7 +46,7 @@ namespace IntegrationTests
                 EndDate = taskItem.EndDate 
             };
 
-            return Created("Api/Task/1", response);
+            return Created($"Task/{response.Id}", response);
         }
 
         [HttpGet]

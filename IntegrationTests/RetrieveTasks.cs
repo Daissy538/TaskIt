@@ -1,4 +1,4 @@
-using IntegrationTests.requestBuilders;
+﻿using IntegrationTests.requestBuilders;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Text.Json;
 using TaskIt.Api.Dtos.Input;
@@ -6,7 +6,7 @@ using TaskIt.Api.Dtos.Output;
 
 namespace IntegrationTests
 {
-    public class Tasks : IClassFixture<WebApplicationFactory<Program>>
+    public class RetrieveTasks : IClassFixture<WebApplicationFactory<Program>>
     {
         private const string TASK_TITLE = "Katten bak schoonmaken";
 
@@ -14,61 +14,11 @@ namespace IntegrationTests
 
         private readonly WebApplicationFactory<Program> _factory;
 
-        public Tasks(WebApplicationFactory<Program> factory)
+        public RetrieveTasks(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
         }
 
-        [Theory]
-        [InlineData(TASK_TITLE, "4040-01-25T20:11:42Z")]
-        [InlineData(TASK_TITLE, null)]
-        public async void Add_A_Task(string title, string? dateTime)
-        {
-            //Arrange
-            var client = _factory.CreateClient();
-
-            var TaskCreateData = new TaskCreateRequestBuilder()
-                .WithTitle(title)
-                .WithEndDate(dateTime != null? DateTime.Parse(dateTime): null)
-                .Create();
-
-            using StringContent request = new HttpStringContentBuilder<TaskCreateRequestDto>()
-                .WithMediaTypeAplicationJson()
-                .WithEndocdingUTF8()
-                .WithContent(TaskCreateData)
-                .Create();
-
-            //Act
-            var response = await client.PostAsync(TASK_URL, request);
-
-            //Assert
-            Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public async void Can_Not_Add_A_Task_Without_Title(string title)
-        {
-            //ARANGE
-            var client = _factory.CreateClient();
-
-            var taskCreateData = new TaskCreateRequestBuilder()
-                .WithTitle(title)
-                .Create();
-
-            using StringContent request = new HttpStringContentBuilder<TaskCreateRequestDto>()
-                .WithMediaTypeAplicationJson()
-                .WithEndocdingUTF8()
-                .WithContent(taskCreateData)
-                .Create();
-
-            //Act
-            var response = await client.PostAsync(TASK_URL, request);
-
-            //ASSERT
-            Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
-        }
 
         [Fact]
         public async void Retrieve_Task()
@@ -91,9 +41,9 @@ namespace IntegrationTests
             Assert.Equal(TASK_TITLE, taskItemAfterAct.Title);
             Assert.Equal(DateTime.Parse(endDate), taskItemAfterAct.EndDate);
         }
-
+        
         [Fact]
-        public async void Retrieve_All()
+        public async void Retrieve_All_Tasks()
         {
             //Arange
             var endDate = "4040-01-25T20:11:42Z";
@@ -142,5 +92,6 @@ namespace IntegrationTests
             var createdTaskItem = JsonSerializer.Deserialize<TaskItemDto>(responseBody);
             return createdTaskItem.Id;
         }
+
     }
 }
