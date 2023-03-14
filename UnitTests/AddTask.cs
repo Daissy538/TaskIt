@@ -13,7 +13,7 @@ namespace UnitTests
         }
 
         [Fact]
-        public void Add_A_Task()
+        public async Task Add_A_Task()
         {
             var taskService = new TaskService();
 
@@ -21,13 +21,13 @@ namespace UnitTests
                 .WithTitle(TASK_TITLE)
                 .Build();
 
-            var response = taskService.CreateTask(request);
+            var response = await taskService.CreateTaskAsync(request);
 
             Assert.Equal(TASK_TITLE, response.Title);
         }
         
         [Fact]
-        public void Add_Task_With_End_Date()
+        public async Task Add_Task_With_End_DateAsync()
         {
             var taskService = new TaskService();
             var currentDateTime = DateTime.UtcNow;
@@ -37,14 +37,14 @@ namespace UnitTests
                             .WithEndDate(currentDateTime)
                             .Build();
 
-            var response = taskService.CreateTask(request);
+            var response =  await taskService.CreateTaskAsync(request);
 
             Assert.Equal(TASK_TITLE, response.Title);
             Assert.Equal(currentDateTime, response.EndDate);
         }
 
         [Fact]
-        public void Do_Not_Add_Task_With_End_Date_In_The_Past()
+        public async Task Do_Not_Add_Task_With_End_Date_In_The_Past()
         {
             var taskService = new TaskService();
             var currentDateTime = DateTime.UtcNow.AddDays(-1);
@@ -54,7 +54,7 @@ namespace UnitTests
                 .WithEndDate(currentDateTime)
                 .Build();
 
-            Assert.Throws<InvalidTaskItemException>(() => taskService.CreateTask(request));
+            Assert.ThrowsAsync<InvalidTaskItemException>(async () => await taskService.CreateTaskAsync(request));
         }
     }
 }

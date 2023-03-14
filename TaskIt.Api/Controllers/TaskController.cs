@@ -36,9 +36,9 @@ namespace IntegrationTests
                 EndDate = taskCreateRequest.EndDate 
             };
 
-            var taskItem = this.taskService.CreateTask(data);
+            var taskItem = await this.taskService.CreateTaskAsync(data);
 
-            taskRepository.Add(taskItem);
+           await taskRepository.AddAsync(taskItem);
 
             var response = new TaskItemDto { 
                 Id = taskItem.Id, 
@@ -49,13 +49,29 @@ namespace IntegrationTests
             return Created($"Task/{response.Id}", response);
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteTaskAsync(Guid id)
+        {
+            var isDeleted = await this.taskRepository.DeleteAsync(id);
+
+            if (!isDeleted)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TaskItemDto>> GetTaskAsync(Guid id)
         {
-            var taskItem = this.taskRepository.GetById(id);
+            var taskItem = await this.taskRepository.GetByIdAsync(id);
 
             if(taskItem == default)
             {
@@ -78,7 +94,7 @@ namespace IntegrationTests
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TaskItemDto>> GetAllTasksAsync()
         {
-            var tasks = this.taskRepository.GetAll();
+            var tasks = await this.taskRepository.GetAllAsync();
 
            var response = tasks.Select(taskItem => new TaskItemDto
             {

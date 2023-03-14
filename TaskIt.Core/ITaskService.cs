@@ -5,6 +5,6 @@ namespace TaskIt.Core
 {
     public interface ITaskService
     {
-       TaskItem CreateTask(CreateTaskRequest createTaskRequest);
+       Task<TaskItem> CreateTaskAsync(CreateTaskRequest createTaskRequest);
     }
 }

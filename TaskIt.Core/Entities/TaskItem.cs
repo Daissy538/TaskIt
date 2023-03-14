@@ -2,11 +2,6 @@
 {
     public class TaskItem
     {
-        public TaskItem()
-        {
-
-        }
-
         public TaskItem(string title)
         {
             Title = title;

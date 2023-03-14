@@ -12,7 +12,7 @@ namespace UnitTests
         {
         }
 
-        public TaskItem CreateTask(CreateTaskRequest createTaskRequest)
+        public async Task<TaskItem> CreateTaskAsync(CreateTaskRequest createTaskRequest)
         {
             this.VerifyEndDate(createTaskRequest);
 

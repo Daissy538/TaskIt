@@ -1,9 +1,8 @@
 using IntegrationTests.requestBuilders;
 using Microsoft.AspNetCore.Mvc.Testing;
-using System.Text.Json;
 using TaskIt.Api.Dtos.Input;
 
-namespace IntegrationTests
+namespace IntegrationTests.Tasks
 {
     public class CreateTasks : IClassFixture<WebApplicationFactory<Program>>
     {
@@ -13,9 +12,12 @@ namespace IntegrationTests
 
         private readonly WebApplicationFactory<Program> _factory;
 
+        private readonly HttpClient client;
+
         public CreateTasks(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
+            client = _factory.CreateClient();
         }
 
         [Theory]
@@ -24,11 +26,9 @@ namespace IntegrationTests
         public async void Add_A_Task(string title, string? dateTime)
         {
             //Arrange
-            var client = _factory.CreateClient();
-
             var TaskCreateData = new TaskCreateRequestBuilder()
                 .WithTitle(title)
-                .WithEndDate(dateTime != null? DateTime.Parse(dateTime): null)
+                .WithEndDate(dateTime != null ? DateTime.Parse(dateTime) : null)
                 .Create();
 
             using StringContent request = new HttpStringContentBuilder<TaskCreateRequestDto>()
@@ -50,8 +50,6 @@ namespace IntegrationTests
         public async void Can_Not_Add_A_Task_Without_Title(string title)
         {
             //ARANGE
-            var client = _factory.CreateClient();
-
             var taskCreateData = new TaskCreateRequestBuilder()
                 .WithTitle(title)
                 .Create();
