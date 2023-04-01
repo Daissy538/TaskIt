@@ -15,3 +15,5 @@
 /TaskIt.Infrastructure/bin/Debug/net7.0
 /TaskIt.Infrastructure/obj
 /UnitTests/bin/Debug/net7.0
+/TaskIt.Application/bin/Debug/net7.0
+/TaskIt.Application/obj
