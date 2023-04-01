@@ -12,12 +12,12 @@ namespace IntegrationTests.Tasks
 
         private readonly WebApplicationFactory<Program> _factory;
 
-        private readonly HttpClient client;
+        private readonly HttpClient _client;
 
         public CreateTasks(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
-            client = _factory.CreateClient();
+            _client = _factory.CreateClient();
         }
 
         [Theory]
@@ -38,7 +38,7 @@ namespace IntegrationTests.Tasks
                 .Create();
 
             //Act
-            var response = await client.PostAsync(TASK_URL, request);
+            var response = await _client.PostAsync(TASK_URL, request);
 
             //Assert
             Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
@@ -61,7 +61,7 @@ namespace IntegrationTests.Tasks
                 .Create();
 
             //Act
-            var response = await client.PostAsync(TASK_URL, request);
+            var response = await _client.PostAsync(TASK_URL, request);
 
             //ASSERT
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);

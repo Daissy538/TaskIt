@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TaskIt.Application\TaskIt.Application.csproj" />
     <ProjectReference Include="..\TaskIt.Core\TaskIt.Core.csproj" />
   </ItemGroup>
 

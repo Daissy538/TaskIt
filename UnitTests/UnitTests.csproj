@@ -22,7 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TaskIt.Core\TaskIt.Core.csproj" />
+    <ProjectReference Include="..\TaskIt.Application\TaskIt.Application.csproj" />
+    <ProjectReference Include="..\TaskIt.Infrastructure\TaskIt.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

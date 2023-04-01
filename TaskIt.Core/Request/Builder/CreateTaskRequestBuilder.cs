@@ -1,6 +1,4 @@
-﻿using UnitTests;
-
-namespace TaskIt.Core.Request.Builder
+﻿namespace TaskIt.Core.Request.Builder
 {
     public class CreateTaskRequestBuilder: IBuilder<CreateTaskRequest>
     {

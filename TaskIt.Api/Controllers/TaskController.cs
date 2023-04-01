@@ -5,6 +5,7 @@ using TaskIt.Core;
 using TaskIt.Core.Entities;
 using TaskIt.Core.RepositoryInterfaces;
 using TaskIt.Core.Request;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace IntegrationTests
 {
@@ -13,12 +14,10 @@ namespace IntegrationTests
     public class TaskController: Controller
     {
         private readonly ITaskService taskService;
-        private readonly ITaskRepository taskRepository;
 
-        public TaskController(ITaskService taskService, ITaskRepository taskRepository)
+        public TaskController(ITaskService taskService)
         {
             this.taskService = taskService;
-            this.taskRepository = taskRepository;
         }
 
         [HttpPost]
@@ -38,8 +37,6 @@ namespace IntegrationTests
 
             var taskItem = await this.taskService.CreateTaskAsync(data);
 
-           await taskRepository.AddAsync(taskItem);
-
             var response = new TaskItemDto { 
                 Id = taskItem.Id, 
                 Title = taskItem.Title, 
@@ -55,7 +52,7 @@ namespace IntegrationTests
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteTaskAsync(Guid id)
         {
-            var isDeleted = await this.taskRepository.DeleteAsync(id);
+            var isDeleted = await this.taskService.DeleteTaskAsync(id);
 
             if (!isDeleted)
             {
@@ -71,7 +68,7 @@ namespace IntegrationTests
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TaskItemDto>> GetTaskAsync(Guid id)
         {
-            var taskItem = await this.taskRepository.GetByIdAsync(id);
+            var taskItem = await this.taskService.GetByIdAsync(id);
 
             if(taskItem == default)
             {
@@ -94,7 +91,7 @@ namespace IntegrationTests
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TaskItemDto>> GetAllTasksAsync()
         {
-            var tasks = await this.taskRepository.GetAllAsync();
+            var tasks = await taskService.GetAllAsync();
 
            var response = tasks.Select(taskItem => new TaskItemDto
             {

@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskIt.Api", "TaskIt.Api\Ta
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskIt.Core", "TaskIt.Core\TaskIt.Core.csproj", "{28B08207-C4AD-4702-883E-26136039E65B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskIt.Infrastructure", "TaskIt.Infrastructure\TaskIt.Infrastructure.csproj", "{BE770929-1808-41E3-AAAA-DEC70C69B83F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskIt.Infrastructure", "TaskIt.Infrastructure\TaskIt.Infrastructure.csproj", "{BE770929-1808-41E3-AAAA-DEC70C69B83F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskIt.Application", "TaskIt.Application\TaskIt.Application.csproj", "{7069924F-E714-4F4D-9D7B-C0E0B5A3E6AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{BE770929-1808-41E3-AAAA-DEC70C69B83F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE770929-1808-41E3-AAAA-DEC70C69B83F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE770929-1808-41E3-AAAA-DEC70C69B83F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7069924F-E714-4F4D-9D7B-C0E0B5A3E6AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7069924F-E714-4F4D-9D7B-C0E0B5A3E6AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7069924F-E714-4F4D-9D7B-C0E0B5A3E6AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7069924F-E714-4F4D-9D7B-C0E0B5A3E6AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
