@@ -5,8 +5,10 @@ namespace TaskIt.Core
 {
     public interface ITaskService
     {
-       Task<TaskItem> CreateTaskAsync(CreateTaskRequest createTaskRequest);
+        Task<Step> AddStepToTaskAsync(CreateStepRequest createStepRequest);
+        Task<TaskItem> CreateTaskAsync(CreateTaskRequest createTaskRequest);
 
+        Task<bool> DeleteStepAsync(Guid id);
         Task<bool> DeleteTaskAsync(Guid Id);
 
         Task<TaskItem?> GetByIdAsync(Guid Id);

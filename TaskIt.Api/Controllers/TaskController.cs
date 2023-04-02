@@ -2,10 +2,7 @@
 using TaskIt.Api.Dtos.Input;
 using TaskIt.Api.Dtos.Output;
 using TaskIt.Core;
-using TaskIt.Core.Entities;
-using TaskIt.Core.RepositoryInterfaces;
 using TaskIt.Core.Request;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace IntegrationTests
 {
@@ -88,7 +85,6 @@ namespace IntegrationTests
         [HttpGet]
         [Route("All")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TaskItemDto>> GetAllTasksAsync()
         {
             var tasks = await taskService.GetAllAsync();

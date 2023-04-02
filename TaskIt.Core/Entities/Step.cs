@@ -1,18 +1,22 @@
-﻿namespace TaskIt.Core.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using UnitTests;
+
+namespace TaskIt.Core.Entities
 {
     public class Step
     {
-        public Step()
-        {
-        }
+        [Key]
+        public Guid Id { get; set; }
 
-        public Step(string title, string description)
-        {
-            Title = title;
-            Description = description;
-        }
-
+        [Required]
+        [StringLength(100, MinimumLength = 1)]
         public string Title { get; set; }
+
         public string Description { get; set; }
+
+        [Required]
+        public Guid TaskId { get; set; }
+
+        public virtual TaskItem Task { get; set;}
     }
 }

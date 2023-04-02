@@ -25,7 +25,7 @@ namespace TaskIt.Infrastructure
             return Tasks.Remove(id);
         }
 
-        public async Task<IList<TaskItem>> GetAllAsync()
+        public async Task<List<TaskItem>> GetAllAsync()
         {
             return Tasks.Values.ToList();
         }

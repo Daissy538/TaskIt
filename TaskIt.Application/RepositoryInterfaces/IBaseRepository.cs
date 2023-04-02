@@ -6,7 +6,7 @@
 
         public Task<T?> GetByIdAsync(Guid id);
 
-        public Task<IList<T>> GetAllAsync();
+        public Task<List<T>> GetAllAsync();
 
         public Task<bool> DeleteAsync(Guid id);
     }

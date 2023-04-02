@@ -1,6 +1,7 @@
 ﻿using TaskIt.Core.Exceptions;
 using TaskIt.Core.Request.Builder;
 using TaskIt.Infrastructure;
+using TaskIt.Infrastructure.Fakes;
 
 namespace UnitTests
 {
@@ -17,7 +18,7 @@ namespace UnitTests
         public async Task Add_A_Task()
         {
             var taskFakeRepository = new TaskFakeRepository();
-            var taskService = new TaskService(taskFakeRepository);
+            var taskService = new TaskService(taskFakeRepository, new StepFakeRepository());
 
             var request = new CreateTaskRequestBuilder()
                 .WithTitle(TASK_TITLE)
@@ -32,7 +33,7 @@ namespace UnitTests
         public async Task Add_Task_With_End_DateAsync()
         {
             var taskFakeRepository = new TaskFakeRepository();
-            var taskService = new TaskService(taskFakeRepository);
+            var taskService = new TaskService(taskFakeRepository, new StepFakeRepository());
             var currentDateTime = DateTime.UtcNow;
 
             var request = new CreateTaskRequestBuilder()
@@ -50,7 +51,7 @@ namespace UnitTests
         public async Task Do_Not_Add_Task_With_End_Date_In_The_Past()
         {
             var taskFakeRepository = new TaskFakeRepository();
-            var taskService = new TaskService(taskFakeRepository);
+            var taskService = new TaskService(taskFakeRepository, new StepFakeRepository());
             var currentDateTime = DateTime.UtcNow.AddDays(-1);
 
             var request = new CreateTaskRequestBuilder()
@@ -58,7 +59,7 @@ namespace UnitTests
                 .WithEndDate(currentDateTime)
                 .Build();
 
-            Assert.ThrowsAsync<InvalidTaskItemException>(async () => await taskService.CreateTaskAsync(request));
+            await Assert.ThrowsAsync<InvalidTaskItemException>(async () => await taskService.CreateTaskAsync(request));
         }
     }
 }

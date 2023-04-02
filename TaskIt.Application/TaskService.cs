@@ -1,4 +1,5 @@
-﻿using TaskIt.Core;
+﻿using TaskIt.Application.RepositoryInterfaces;
+using TaskIt.Core;
 using TaskIt.Core.Entities;
 using TaskIt.Core.Exceptions;
 using TaskIt.Core.RepositoryInterfaces;
@@ -9,21 +10,38 @@ namespace UnitTests
     public class TaskService: ITaskService
     {
         private readonly ITaskRepository _taskRepository;
+        private readonly IStepRepository _stepRepository;
 
-        public TaskService(ITaskRepository taskRepository)
+        public TaskService(ITaskRepository taskRepository, IStepRepository stepRepository)
         {
             _taskRepository = taskRepository;
+            _stepRepository = stepRepository;
+        }
+
+        public async Task<Step> AddStepToTaskAsync(CreateStepRequest createStepRequest)
+        {
+           createStepRequest.VerifyData();
+           var step = createStepRequest.GenerateStep();
+
+            await _stepRepository.AddAsync(step);
+
+            return step;
         }
 
         public async Task<TaskItem> CreateTaskAsync(CreateTaskRequest createTaskRequest)
         {
-            this.VerifyEndDate(createTaskRequest);
+            createTaskRequest.VerifyEndDate();
 
-            var item = new TaskItem(createTaskRequest.Title, createTaskRequest.EndDate);
+            TaskItem item = new TaskItem(createTaskRequest.Title, createTaskRequest.EndDate);
 
             await _taskRepository.AddAsync(item);
 
             return item;
+        }
+
+        public async Task<bool> DeleteStepAsync(Guid id)
+        {
+           return await _stepRepository.DeleteAsync(id);
         }
 
         public async Task<bool> DeleteTaskAsync(Guid Id)
@@ -41,17 +59,6 @@ namespace UnitTests
            return await _taskRepository.GetByIdAsync(Id);
         }
 
-        private void VerifyEndDate(CreateTaskRequest createTaskRequest)
-        {
-            if (createTaskRequest.EndDate.HasValue)
-            {
-                var endDateInThePast = createTaskRequest.EndDate.Value.Date < DateTime.UtcNow.Date;
 
-                if (endDateInThePast)
-                {
-                    throw new InvalidTaskItemException("The end date is in the past");
-                }
-            }
-        }
     }
 }
