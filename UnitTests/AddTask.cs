@@ -1,4 +1,5 @@
-﻿using TaskIt.Core.Exceptions;
+﻿using FluentAssertions;
+using TaskIt.Core.Exceptions;
 using TaskIt.Core.Request.Builder;
 using TaskIt.Infrastructure;
 using TaskIt.Infrastructure.Fakes;
@@ -8,32 +9,30 @@ namespace UnitTests
     public class AddTask
     {
         private const string TASK_TITLE = "Katten bak schoonmaken";
+        private TaskService taskService;
+        private TaskFakeRepository taskFakeRepository;
 
         public AddTask()
         {
-                
+            taskFakeRepository = new TaskFakeRepository();
+            taskService = new TaskService(taskFakeRepository, new StepFakeRepository());
         }
 
         [Fact]
         public async Task Add_A_Task()
         {
-            var taskFakeRepository = new TaskFakeRepository();
-            var taskService = new TaskService(taskFakeRepository, new StepFakeRepository());
-
             var request = new CreateTaskRequestBuilder()
                 .WithTitle(TASK_TITLE)
                 .Build();
 
             var response = await taskService.CreateTaskAsync(request);
 
-            Assert.Equal(TASK_TITLE, response.Title);
+            response.Title.Should().Be(TASK_TITLE);
         }
         
         [Fact]
         public async Task Add_Task_With_End_DateAsync()
         {
-            var taskFakeRepository = new TaskFakeRepository();
-            var taskService = new TaskService(taskFakeRepository, new StepFakeRepository());
             var currentDateTime = DateTime.UtcNow;
 
             var request = new CreateTaskRequestBuilder()
@@ -43,15 +42,13 @@ namespace UnitTests
 
             var response =  await taskService.CreateTaskAsync(request);
 
-            Assert.Equal(TASK_TITLE, response.Title);
-            Assert.Equal(currentDateTime, response.EndDate);
+            response.Title.Should().Be(TASK_TITLE);
+            response.EndDate.Should().Be(currentDateTime);
         }
 
         [Fact]
         public async Task Do_Not_Add_Task_With_End_Date_In_The_Past()
         {
-            var taskFakeRepository = new TaskFakeRepository();
-            var taskService = new TaskService(taskFakeRepository, new StepFakeRepository());
             var currentDateTime = DateTime.UtcNow.AddDays(-1);
 
             var request = new CreateTaskRequestBuilder()
@@ -59,7 +56,8 @@ namespace UnitTests
                 .WithEndDate(currentDateTime)
                 .Build();
 
-            await Assert.ThrowsAsync<InvalidTaskItemException>(async () => await taskService.CreateTaskAsync(request));
+            var act = taskService.CreateTaskAsync(request);
+            await Assert.ThrowsAsync<InvalidTaskItemException>(async () => await act);
         }
     }
 }
