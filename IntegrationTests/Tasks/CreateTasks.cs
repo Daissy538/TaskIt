@@ -1,10 +1,11 @@
+using FluentAssertions;
 using IntegrationTests.requestBuilders;
 using Microsoft.AspNetCore.Mvc.Testing;
 using TaskIt.Api.Dtos.Input;
 
 namespace IntegrationTests.Tasks
 {
-    public class CreateTasks : IClassFixture<WebApplicationFactory<Program>>
+    public class CreateTasks : IClassFixture<WebApplicationFactory<Program>>, IAsyncDisposable
     {
         private const string TASK_TITLE = "Katten bak schoonmaken";
 
@@ -18,6 +19,12 @@ namespace IntegrationTests.Tasks
         {
             _factory = factory;
             _client = _factory.CreateClient();
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            _client.Dispose();
+            _factory.Dispose();
         }
 
         [Theory]
@@ -41,7 +48,7 @@ namespace IntegrationTests.Tasks
             var response = await _client.PostAsync(TASK_URL, request);
 
             //Assert
-            Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         }
 
         [Theory]
@@ -64,7 +71,8 @@ namespace IntegrationTests.Tasks
             var response = await _client.PostAsync(TASK_URL, request);
 
             //ASSERT
-            Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+
         }
     }
 }

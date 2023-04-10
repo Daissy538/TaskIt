@@ -1,8 +1,9 @@
-using TaskIt.Application.RepositoryInterfaces;
+using Microsoft.EntityFrameworkCore;
+using TaskIt.Adapter.SQL.Context;
+using TaskIt.Adapter.SQL.Steps;
+using TaskIt.Adapter.SQL.Tasks;
+using TaskIt.Application.Ports.RepositoryInterfaces;
 using TaskIt.Core;
-using TaskIt.Core.RepositoryInterfaces;
-using TaskIt.Infrastructure;
-using TaskIt.Infrastructure.Fakes;
 using UnitTests;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +16,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<ITaskService, TaskService>();
-builder.Services.AddSingleton<ITaskRepository, TaskFakeRepository>();
-builder.Services.AddSingleton<IStepRepository, StepFakeRepository>();
+builder.Services.AddTransient<ITaskRepository, TaskRepository>();
+builder.Services.AddTransient<IStepRepository, StepsRepository>();
+
+builder.Services.AddDbContext<TaskItSQLDbContext>(options => options.UseSqlServer("Data Source=.\\SQLEXPRESS; Database=TaskIt;TrustServerCertificate=True;Integrated Security=True"));
 
 var app = builder.Build();
 

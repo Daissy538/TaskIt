@@ -1,7 +1,7 @@
-﻿using TaskIt.Application.RepositoryInterfaces;
+﻿using TaskIt.Application.Ports.RepositoryInterfaces;
 using TaskIt.Core.Entities;
 
-namespace TaskIt.Infrastructure.Fakes
+namespace TaskIt.Adapter.Fakes
 {
     public class StepFakeRepository : IStepRepository
     {

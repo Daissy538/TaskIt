@@ -25,7 +25,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskIt.Application\TaskIt.Application.csproj" />
-    <ProjectReference Include="..\TaskIt.Infrastructure\TaskIt.Infrastructure.csproj" />
+    <ProjectReference Include="..\TaskIt.Infrastructure\TaskIt.Adapter.Fake.csproj" />
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using IntegrationTests.requestBuilders;
+﻿using FluentAssertions;
+using IntegrationTests.requestBuilders;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Text.Json;
 using TaskIt.Api.Dtos.Input;
@@ -13,24 +14,17 @@ namespace IntegrationTests.Tasks
         private const string TASK_URL = "Task";
 
         private readonly WebApplicationFactory<Program> _factory;
-        private readonly HttpClient client;
-        private readonly List<Guid> createdTasks;
+        private readonly HttpClient _client;
 
         public RetrieveTasks(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
-            client = _factory.CreateClient();
-            createdTasks = new List<Guid>();
+            _client = _factory.CreateClient();
         }
 
         public async ValueTask DisposeAsync()
         {
-            foreach (Guid task in createdTasks)
-            {
-                await client.DeleteAsync($"{TASK_URL}/{task}");
-            }
-
-            client.Dispose();
+            _client.Dispose();
             _factory.Dispose();
         }
 
@@ -44,7 +38,7 @@ namespace IntegrationTests.Tasks
             var createdTaskId = await PostNewTask(DateTime.Parse(endDate), TASK_TITLE);
 
             //ACT
-            var repsonseAfterAct = await client.GetAsync($"{TASK_URL}/{createdTaskId}");
+            var repsonseAfterAct = await _client.GetAsync($"{TASK_URL}/{createdTaskId}");
 
             //ASSERT
             var responseStringAfterAct = await repsonseAfterAct.Content.ReadAsStringAsync();
@@ -53,11 +47,6 @@ namespace IntegrationTests.Tasks
             Assert.NotNull(taskItemAfterAct);
             Assert.Equal(TASK_TITLE, taskItemAfterAct.Title);
             Assert.Equal(DateTime.Parse(endDate), taskItemAfterAct.EndDate);
-
-            foreach (Guid task in createdTasks)
-            {
-                await client.DeleteAsync($"{TASK_URL}/{task}");
-            }
         }
 
         [Fact]
@@ -79,13 +68,8 @@ namespace IntegrationTests.Tasks
             var responseStringAfterAct = await repsonseAfterAct.Content.ReadAsStringAsync();
             var taskItemsAfterAct = JsonSerializer.Deserialize<List<TaskItemDto>>(responseStringAfterAct);
 
-            Assert.NotNull(taskItemsAfterAct);
-            Assert.Equal(amountOfCreatedTasks, taskItemsAfterAct.Count());
-
-            foreach (Guid task in createdTasks)
-            {
-                await client.DeleteAsync($"{TASK_URL}/{task}");
-            }
+            taskItemsAfterAct.Should().NotBeNull();
+            taskItemsAfterAct.Count.Should().BeGreaterThanOrEqualTo(amountOfCreatedTasks);
         }
 
         private async Task PostMultipleNewTasks(DateTime endDate, string title, int amount)
@@ -109,12 +93,11 @@ namespace IntegrationTests.Tasks
                 .WithContent(taskCreateData)
             .Create();
 
-            var responseCreateRequest = await client.PostAsync(TASK_URL, httpContentString);
+            var responseCreateRequest = await _client.PostAsync(TASK_URL, httpContentString);
 
             var responseBody = await responseCreateRequest.Content.ReadAsStringAsync();
             var createdTaskItem = JsonSerializer.Deserialize<TaskItemDto>(responseBody);
-
-            createdTasks.Add(createdTaskItem.Id);
+            
             return createdTaskItem.Id;
         }
     }

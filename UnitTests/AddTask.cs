@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
 using TaskIt.Core.Exceptions;
 using TaskIt.Core.Request.Builder;
-using TaskIt.Infrastructure;
-using TaskIt.Infrastructure.Fakes;
+using TaskIt.Adapter.Fakes;
 
 namespace UnitTests
 {

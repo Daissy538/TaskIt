@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using TaskIt.Api.Dtos.Input;
 using TaskIt.Api.Dtos.Output;
 using TaskIt.Core;
@@ -10,11 +12,13 @@ namespace IntegrationTests
     [Route("[controller]")]
     public class TaskController: Controller
     {
-        private readonly ITaskService taskService;
+        private readonly ITaskService _taskService;
+        private readonly ILogger<TaskController> _logger;
 
-        public TaskController(ITaskService taskService)
+        public TaskController(ITaskService taskService, ILogger<TaskController> logger)
         {
-            this.taskService = taskService;
+            this._taskService = taskService;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -22,25 +26,36 @@ namespace IntegrationTests
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TaskItemDto>> PostTaskAsync(TaskCreateRequestDto taskCreateRequest)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest("Invalid request");
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid request");
+                }
+
+                var data = new CreateTaskRequest()
+                {
+                    Title = taskCreateRequest.Title,
+                    EndDate = taskCreateRequest.EndDate
+                };
+
+                var taskItem = await this._taskService.CreateTaskAsync(data);
+
+                var response = new TaskItemDto
+                {
+                    Id = taskItem.Id,
+                    Title = taskItem.Title,
+                    EndDate = taskItem.EndDate
+                };
+
+                return Created($"Task/{response.Id}", response);
+            }
+            catch(Exception ex) 
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
             }
 
-            var data = new CreateTaskRequest() { 
-                Title= taskCreateRequest.Title, 
-                EndDate = taskCreateRequest.EndDate 
-            };
-
-            var taskItem = await this.taskService.CreateTaskAsync(data);
-
-            var response = new TaskItemDto { 
-                Id = taskItem.Id, 
-                Title = taskItem.Title, 
-                EndDate = taskItem.EndDate 
-            };
-
-            return Created($"Task/{response.Id}", response);
         }
 
         [HttpDelete]
@@ -49,14 +64,23 @@ namespace IntegrationTests
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteTaskAsync(Guid id)
         {
-            var isDeleted = await this.taskService.DeleteTaskAsync(id);
-
-            if (!isDeleted)
+            try
             {
-                return NotFound();
+                var isDeleted = await this._taskService.DeleteTaskAsync(id);
+
+                if (!isDeleted)
+                {
+                    return NotFound();
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
             }
 
-            return Ok();
         }
 
         [HttpGet]
@@ -65,21 +89,28 @@ namespace IntegrationTests
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TaskItemDto>> GetTaskAsync(Guid id)
         {
-            var taskItem = await this.taskService.GetByIdAsync(id);
-
-            if(taskItem == default)
+            try
             {
-                return NotFound();
+                var taskItem = await this._taskService.GetByIdAsync(id);
+
+                if (taskItem == default)
+                {
+                    return NotFound();
+                }
+
+                var response = new TaskItemDto
+                {
+                    Id = taskItem.Id,
+                    Title = taskItem.Title,
+                    EndDate = taskItem.EndDate
+                };
+
+                return Ok(response);
+            } catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
             }
-
-            var response = new TaskItemDto
-            {
-                Id = taskItem.Id,
-                Title = taskItem.Title,
-                EndDate = taskItem.EndDate
-            };
-
-            return Ok(response);
         }
 
         [HttpGet]
@@ -87,17 +118,26 @@ namespace IntegrationTests
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<TaskItemDto>> GetAllTasksAsync()
         {
-            var tasks = await taskService.GetAllAsync();
-
-           var response = tasks.Select(taskItem => new TaskItemDto
+            try
             {
-                Id = taskItem.Id,
-                Title = taskItem.Title,
-                EndDate = taskItem.EndDate
-            });
+                var tasks = await _taskService.GetAllAsync();
+
+                var response = tasks.Select(taskItem => new TaskItemDto
+                {
+                    Id = taskItem.Id,
+                    Title = taskItem.Title,
+                    EndDate = taskItem.EndDate
+                });
 
 
-            return Ok(response);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
+
         }
     }
 }

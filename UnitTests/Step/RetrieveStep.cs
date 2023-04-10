@@ -1,6 +1,6 @@
 ﻿using TaskIt.Core.Request.Builder;
-using TaskIt.Infrastructure.Fakes;
-using TaskIt.Infrastructure;
+using TaskIt.Adapter.Fakes;
+using TaskIt.Adapter;
 using TaskIt.Core.Entities;
 using FluentAssertions;
 using TaskIt.Core;

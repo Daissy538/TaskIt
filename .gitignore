@@ -17,3 +17,5 @@
 /UnitTests/bin/Debug/net7.0
 /TaskIt.Application/bin/Debug/net7.0
 /TaskIt.Application/obj
+/TaskIt.Infrastructure.SQL/bin/Debug/net7.0
+/TaskIt.Infrastructure.SQL/obj

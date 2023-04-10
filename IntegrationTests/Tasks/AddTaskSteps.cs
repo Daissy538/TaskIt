@@ -1,4 +1,5 @@
-﻿using IntegrationTests.requestBuilders;
+﻿using FluentAssertions;
+using IntegrationTests.requestBuilders;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Text.Json;
 using TaskIt.Api.Dtos.Input;
@@ -6,7 +7,7 @@ using TaskIt.Api.Dtos.Output;
 
 namespace IntegrationTests.Tasks
 {
-    public class AddTaskSteps : IClassFixture<WebApplicationFactory<Program>>
+    public class AddTaskSteps : IClassFixture<WebApplicationFactory<Program>>, IAsyncDisposable
     {
         private const string TASK_TITLE = "Katten bak schoonmaken";
         private const string TASK_URL = "Task";
@@ -21,13 +22,20 @@ namespace IntegrationTests.Tasks
             _client = _factory.CreateClient();
         }
 
+        public async ValueTask DisposeAsync()
+        {
+            _client.Dispose();
+            _factory.Dispose();
+        }
+
+
         [Fact]
         public async void Add_A_Step_To_A_Task()
         {
             var endDate = "4040-01-25T20:11:42Z";
             var createdTaskId = await PostNewTask(DateTime.Parse(endDate), TASK_TITLE);
 
-            Assert.NotNull(createdTaskId);
+            createdTaskId.Should().NotBeEmpty(); 
         }
 
         private async Task<Guid> PostNewTask(DateTime endDate, string title)

@@ -1,9 +1,8 @@
-﻿using TaskIt.Core.Entities;
-using TaskIt.Core.RepositoryInterfaces;
+﻿using TaskIt.Application.Ports.RepositoryInterfaces;
+using TaskIt.Core.Entities;
 
-namespace TaskIt.Infrastructure
+namespace TaskIt.Adapter.Fakes
 {
-
     public class TaskFakeRepository : ITaskRepository
     {
         private readonly Dictionary<Guid, TaskItem> Tasks;

@@ -1,8 +1,7 @@
-﻿using TaskIt.Application.RepositoryInterfaces;
+﻿using TaskIt.Application.Ports.RepositoryInterfaces;
 using TaskIt.Core;
 using TaskIt.Core.Entities;
 using TaskIt.Core.Exceptions;
-using TaskIt.Core.RepositoryInterfaces;
 using TaskIt.Core.Request;
 
 namespace UnitTests

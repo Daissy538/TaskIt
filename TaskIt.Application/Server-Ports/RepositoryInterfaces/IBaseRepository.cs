@@ -1,4 +1,4 @@
-﻿namespace TaskIt.Core.RepositoryInterfaces
+﻿namespace TaskIt.Application.Ports.RepositoryInterfaces
 {
     public interface IBaseRepository<T>
     {

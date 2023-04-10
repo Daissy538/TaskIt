@@ -2,8 +2,8 @@
 using TaskIt.Core;
 using TaskIt.Core.Entities;
 using TaskIt.Core.Request.Builder;
-using TaskIt.Infrastructure;
-using TaskIt.Infrastructure.Fakes;
+using TaskIt.Adapter;
+using TaskIt.Adapter.Fakes;
 
 namespace UnitTests.Step
 {

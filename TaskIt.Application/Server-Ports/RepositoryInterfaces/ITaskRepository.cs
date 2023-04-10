@@ -1,9 +1,9 @@
 ﻿using TaskIt.Core.Entities;
 
-namespace TaskIt.Core.RepositoryInterfaces
+namespace TaskIt.Application.Ports.RepositoryInterfaces
 {
     public interface ITaskRepository : IBaseRepository<TaskItem>
     {
-    
+
     }
 }

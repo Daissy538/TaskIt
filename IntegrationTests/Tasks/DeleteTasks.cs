@@ -1,5 +1,4 @@
 ﻿using IntegrationTests.requestBuilders;
-using IntegrationTests.requestBuilders;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Text.Json;
 using TaskIt.Api.Dtos.Input;
@@ -7,18 +6,24 @@ using TaskIt.Api.Dtos.Output;
 
 namespace IntegrationTests.Tasks
 {
-    public class DeleteTasks : IClassFixture<WebApplicationFactory<Program>>
+    public class DeleteTasks : IClassFixture<WebApplicationFactory<Program>>, IAsyncDisposable
     {
         private const string TASK_TITLE = "Katten bak schoonmaken";
         private const string TASK_URL = "Task";
 
         private readonly WebApplicationFactory<Program> _factory;
-        private readonly HttpClient client;
+        private readonly HttpClient _client;
 
         public DeleteTasks(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
-            client = _factory.CreateClient();
+            _client = _factory.CreateClient();
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            _client.Dispose();
+            _factory.Dispose();
         }
 
         [Fact]
@@ -30,7 +35,7 @@ namespace IntegrationTests.Tasks
             var createdTaskId = await PostNewTask(DateTime.Parse(endDate), TASK_TITLE);
 
             //Act
-            var response = await client.DeleteAsync($"{TASK_URL}/{createdTaskId}");
+            var response = await _client.DeleteAsync($"{TASK_URL}/{createdTaskId}");
 
             //Assert
             Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
@@ -45,7 +50,7 @@ namespace IntegrationTests.Tasks
             var createdTaskId = await PostNewTask(DateTime.Parse(endDate), TASK_TITLE);
 
             //Act
-            var response = await client.DeleteAsync($"{TASK_URL}/{Guid.NewGuid()}");
+            var response = await _client.DeleteAsync($"{TASK_URL}/{Guid.NewGuid()}");
 
             //Assert
             Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
@@ -65,7 +70,7 @@ namespace IntegrationTests.Tasks
                 .WithContent(taskCreateData)
             .Create();
 
-            var responseCreateRequest = await client.PostAsync(TASK_URL, httpContentString);
+            var responseCreateRequest = await _client.PostAsync(TASK_URL, httpContentString);
 
             var responseBody = await responseCreateRequest.Content.ReadAsStringAsync();
             var createdTaskItem = JsonSerializer.Deserialize<TaskItemDto>(responseBody);
