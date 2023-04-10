@@ -19,3 +19,7 @@
 /TaskIt.Application/obj
 /TaskIt.Infrastructure.SQL/bin/Debug/net7.0
 /TaskIt.Infrastructure.SQL/obj
+/TaskIt.Adapter/bin/Debug/net7.0
+/TaskIt.Adapter/obj
+/TaskIt.Adapter.SQL/bin/Debug/net7.0
+/TaskIt.Adapter.SQL/obj
