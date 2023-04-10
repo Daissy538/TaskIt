@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TaskIt.Adapter.SQL\TaskIt.Adapter.SQL.csproj" />
+    <ProjectReference Include="..\TaskIt.Adapter\TaskIt.Adapter.Fake.csproj" />
     <ProjectReference Include="..\TaskIt.Application\TaskIt.Application.csproj" />
-    <ProjectReference Include="..\TaskIt.Infrastructure.SQL\TaskIt.Adapter.SQL.csproj" />
-    <ProjectReference Include="..\TaskIt.Infrastructure\TaskIt.Adapter.Fake.csproj" />
   </ItemGroup>
 </Project>
