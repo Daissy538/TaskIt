@@ -32,7 +32,7 @@ namespace TaskIt.Infrastructure.Fakes
 
         public async Task<Step?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return Steps.GetValueOrDefault(id);
         }
     }
 }

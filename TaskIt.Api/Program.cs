@@ -1,6 +1,8 @@
+using TaskIt.Application.RepositoryInterfaces;
 using TaskIt.Core;
 using TaskIt.Core.RepositoryInterfaces;
 using TaskIt.Infrastructure;
+using TaskIt.Infrastructure.Fakes;
 using UnitTests;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<ITaskService, TaskService>();
 builder.Services.AddSingleton<ITaskRepository, TaskFakeRepository>();
+builder.Services.AddSingleton<IStepRepository, StepFakeRepository>();
 
 var app = builder.Build();
 
