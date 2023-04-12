@@ -61,5 +61,25 @@ namespace UnitTests.Step
             var amountOfStepsAfterAct = (await stepFakeRepository.GetAllAsync()).Count;
             amountOfStepsAfterAct.Should().BeLessThan(amountOfStepsBeforeAct);
         }
+
+        [Fact]
+        public async Task Can_Not_Delete_A_Not_Existing_Step()
+        {
+            var stepRequest = new CreateStepRequestBuilder()
+                                    .WithTitle(STEP_TITLE)
+                                    .WithDescription(STEP_DESCRIPTION)
+                                    .WithTaskId(task.Id)
+                                    .Build();
+
+            var step = await taskService.AddStepToTaskAsync(stepRequest);
+
+            var amountOfStepsBeforeAct = (await stepFakeRepository.GetAllAsync()).Count;
+
+            //ACT
+            var response = await taskService.DeleteStepAsync(new Guid());
+
+            //Assert            
+            response.Should().BeFalse();
+        }
     }
 }

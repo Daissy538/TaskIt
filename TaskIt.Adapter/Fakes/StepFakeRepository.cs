@@ -20,6 +20,11 @@ namespace TaskIt.Adapter.Fakes
             Steps.Add(id, item);
         }
 
+        public bool Delete(Guid id)
+        {
+            return Steps.Remove(id);
+        }
+
         public async Task<bool> DeleteAsync(Guid id)
         {
             return Steps.Remove(id);
@@ -30,9 +35,21 @@ namespace TaskIt.Adapter.Fakes
             return Steps.Values.ToList();
         }
 
+        public async Task<List<Step>> GetAllForTaskAsync(Guid taksId)
+        {
+           return Steps.Values
+                .Where(s => s.TaskId == taksId)
+                .ToList();
+        }
+
         public async Task<Step?> GetByIdAsync(Guid id)
         {
             return Steps.GetValueOrDefault(id);
+        }
+
+        public Task SaveChangesAsync()
+        {
+            return Task.CompletedTask;
         }
     }
 }

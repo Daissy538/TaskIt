@@ -3,7 +3,7 @@ using TaskIt.Core.Exceptions;
 using TaskIt.Core.Request.Builder;
 using TaskIt.Adapter.Fakes;
 
-namespace UnitTests
+namespace UnitTests.Tasks
 {
     public class AddTask
     {
@@ -28,7 +28,7 @@ namespace UnitTests
 
             response.Title.Should().Be(TASK_TITLE);
         }
-        
+
         [Fact]
         public async Task Add_Task_With_End_DateAsync()
         {
@@ -39,7 +39,7 @@ namespace UnitTests
                             .WithEndDate(currentDateTime)
                             .Build();
 
-            var response =  await taskService.CreateTaskAsync(request);
+            var response = await taskService.CreateTaskAsync(request);
 
             response.Title.Should().Be(TASK_TITLE);
             response.EndDate.Should().Be(currentDateTime);

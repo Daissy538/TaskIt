@@ -19,6 +19,11 @@ namespace TaskIt.Adapter.Fakes
             Tasks.Add(id, item);
         }
 
+        public bool Delete(Guid id)
+        {
+            return Tasks.Remove(id);
+        }
+
         public async Task<bool> DeleteAsync(Guid id)
         {
             return Tasks.Remove(id);
@@ -33,6 +38,11 @@ namespace TaskIt.Adapter.Fakes
         {
             var repsonse = Tasks.SingleOrDefault(t => t.Key == id);
             return repsonse.Value;
+        }
+
+        public Task SaveChangesAsync()
+        {
+            return Task.CompletedTask;
         }
     }
 }

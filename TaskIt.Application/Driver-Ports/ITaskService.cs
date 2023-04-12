@@ -15,5 +15,6 @@ namespace TaskIt.Core
 
         Task<IList<TaskItem>> GetAllAsync();
         Task<Step?> GetStepByIdAsync(Guid id);
+        Task<List<Step>> GetAllStepsForTaskAsync(Guid id);
     }
 }

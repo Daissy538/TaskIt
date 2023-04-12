@@ -1,11 +1,13 @@
 ﻿using FluentAssertions;
 using IntegrationTests.requestBuilders;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
+using System.Net;
 using System.Text.Json;
 using TaskIt.Api.Dtos.Input;
 using TaskIt.Api.Dtos.Output;
 
-namespace IntegrationTests.Tasks
+namespace IntegrationTests.Steps
 {
     public class AddTaskSteps : IClassFixture<WebApplicationFactory<Program>>, IAsyncDisposable
     {
@@ -35,7 +37,24 @@ namespace IntegrationTests.Tasks
             var endDate = "4040-01-25T20:11:42Z";
             var createdTaskId = await PostNewTask(DateTime.Parse(endDate), TASK_TITLE);
 
-            createdTaskId.Should().NotBeEmpty(); 
+            var stepCreateData = new StepCreateRequestBuilder()
+                                    .WithTitle("Klonten scheppen")
+                                    .WithDescription("Test omschrijving")
+                                    .WithTask(createdTaskId)
+                                    .Create();
+
+            using StringContent httpContentString = new HttpStringContentBuilder<StepCreatedRequestDto>()
+                                                            .WithMediaTypeAplicationJson()
+                                                            .WithEndocdingUTF8()
+                                                            .WithContent(stepCreateData)
+                                                            .Create();
+
+            var responseCreateRequest = await _client.PostAsync(TASK_URL, httpContentString);
+
+            var responseBody = await responseCreateRequest.Content.ReadAsStringAsync();
+            var createdStepItem = JsonSerializer.Deserialize<TaskItemDto>(responseBody);
+
+            responseCreateRequest.StatusCode.Should().Be(HttpStatusCode.Created);
         }
 
         private async Task<Guid> PostNewTask(DateTime endDate, string title)
@@ -53,9 +72,9 @@ namespace IntegrationTests.Tasks
 
             var responseCreateRequest = await _client.PostAsync(TASK_URL, httpContentString);
 
-           var responseBody = await responseCreateRequest.Content.ReadAsStringAsync();
-           var createdTaskItem = JsonSerializer.Deserialize<TaskItemDto>(responseBody);
-           return createdTaskItem.Id;
+            var responseBody = await responseCreateRequest.Content.ReadAsStringAsync();
+            var createdTaskItem = JsonSerializer.Deserialize<TaskItemDto>(responseBody);
+            return createdTaskItem.Id;
         }
     }
 }

@@ -20,9 +20,31 @@ namespace TaskIt.Adapter.SQL.Steps
             _dbContext.SaveChanges();
         }
 
+        public bool Delete(Guid id)
+        {
+            var step = _dbContext.Steps
+                    .AsNoTracking()
+                    .SingleOrDefault(t => t.Id == id);
+
+            if (step == default)
+            {
+                return false;
+            }
+
+            _dbContext.Steps.Remove(step);
+
+            return true;
+        }
+
         public async Task<bool> DeleteAsync(Guid id)
         {
             var step = await GetByIdAsync(id);
+
+            if (step == default)
+            {
+                return false;
+            }
+
             _dbContext.Steps.Remove(step);
             _dbContext.SaveChanges();
 
@@ -34,11 +56,23 @@ namespace TaskIt.Adapter.SQL.Steps
             return await _dbContext.Steps.ToListAsync();
         }
 
+        public async Task<List<Step>> GetAllForTaskAsync(Guid taksId)
+        {
+            return await _dbContext.Steps
+                .Where(s => s.TaskId == taksId)
+                .ToListAsync();
+        }
+
         public async Task<Step?> GetByIdAsync(Guid id)
         {
             return await _dbContext.Steps
                     .AsNoTracking()
                     .SingleOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

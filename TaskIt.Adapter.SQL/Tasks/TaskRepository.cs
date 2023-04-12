@@ -20,6 +20,22 @@ namespace TaskIt.Adapter.SQL.Tasks
             _dbContext.SaveChanges();
         }
 
+        public bool Delete(Guid id)
+        {
+            var task = _dbContext.Tasks
+                                .AsNoTracking()
+                                .SingleOrDefault(t => t.Id == id);
+
+            if (task == default)
+            {
+                return false;
+            }
+
+            _dbContext.Tasks.Remove(task);
+
+            return true;
+        }
+
         public async Task<bool> DeleteAsync(Guid id)
         {
             var task = await GetByIdAsync(id);
@@ -45,6 +61,11 @@ namespace TaskIt.Adapter.SQL.Tasks
             return await _dbContext.Tasks
                 .AsNoTracking()
                 .SingleOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

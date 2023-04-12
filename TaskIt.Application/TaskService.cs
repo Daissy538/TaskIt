@@ -1,7 +1,6 @@
 ﻿using TaskIt.Application.Ports.RepositoryInterfaces;
 using TaskIt.Core;
 using TaskIt.Core.Entities;
-using TaskIt.Core.Exceptions;
 using TaskIt.Core.Request;
 
 namespace UnitTests
@@ -45,12 +44,35 @@ namespace UnitTests
 
         public async Task<bool> DeleteTaskAsync(Guid Id)
         {
-            return await _taskRepository.DeleteAsync(Id);
+            
+                var steps = await _stepRepository.GetAllForTaskAsync(Id);
+
+                foreach (var step in steps)
+                {
+                    _stepRepository.Delete(step.Id);
+                }
+
+                var isTaskDeleted = _taskRepository.Delete(Id);
+
+                if (!isTaskDeleted)
+                {
+                    return false;
+                }
+
+                await _taskRepository.SaveChangesAsync();
+
+                return true;
         }
 
         public async Task<IList<TaskItem>> GetAllAsync()
         {
             return await _taskRepository.GetAllAsync();
+        }
+
+        public async Task<List<Step>> GetAllStepsForTaskAsync(Guid tasKId)
+        {
+            var steps = await _stepRepository.GetAllForTaskAsync(tasKId);
+            return steps;
         }
 
         public async Task<TaskItem?> GetByIdAsync(Guid Id)

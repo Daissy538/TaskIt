@@ -9,5 +9,9 @@
         public Task<List<T>> GetAllAsync();
 
         public Task<bool> DeleteAsync(Guid id);
+
+        public bool Delete(Guid id);
+
+        public Task SaveChangesAsync();
     }
 }

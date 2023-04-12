@@ -56,6 +56,21 @@ namespace IntegrationTests.Tasks
             Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
         }
 
+        [Fact]
+        public async Task Delete_Task_With_Steps()
+        {
+            //Arrange
+            var endDate = "4040-01-25T20:11:42Z";
+
+            var createdTaskId = await PostNewTask(DateTime.Parse(endDate), TASK_TITLE);
+            var response = await _client.DeleteAsync($"{TASK_URL}/{createdTaskId}");
+
+
+
+            //Assert
+            Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        }
+
 
         private async Task<Guid> PostNewTask(DateTime endDate, string title)
         {
