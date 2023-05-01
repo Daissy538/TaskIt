@@ -4,6 +4,7 @@ using System.Net;
 using TaskIt.Api.Dtos.Input;
 using TaskIt.Api.Dtos.Output;
 using TaskIt.Core;
+using TaskIt.Core.Entities;
 using TaskIt.Core.Request;
 
 namespace IntegrationTests
@@ -102,7 +103,16 @@ namespace IntegrationTests
                 {
                     Id = taskItem.Id,
                     Title = taskItem.Title,
-                    EndDate = taskItem.EndDate
+                    EndDate = taskItem.EndDate,
+                    Steps = taskItem.Steps.Select(s =>
+                    {
+                        return new StepItemDto
+                        {
+                            Id = s.Id,
+                            Description = s.Description,
+                            Title = s.Title
+                        };
+                    }).ToList()
                 };
 
                 return Ok(response);

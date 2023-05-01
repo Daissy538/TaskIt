@@ -53,7 +53,9 @@ namespace TaskIt.Adapter.SQL.Tasks
 
         public async Task<List<TaskItem>> GetAllAsync()
         {
-            return await _dbContext.Tasks.ToListAsync();
+            return await _dbContext.Tasks
+                .Include(t => t.Steps)
+                .ToListAsync();
         }
 
         public async Task<TaskItem?> GetByIdAsync(Guid id)

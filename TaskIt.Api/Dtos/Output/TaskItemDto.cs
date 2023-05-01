@@ -10,5 +10,7 @@ namespace TaskIt.Api.Dtos.Output
         public string Title { get; set; }
         [JsonPropertyName("endDate")]
         public DateTime? EndDate { get; set; }
+        [JsonPropertyName("steps")]
+        public List<StepItemDto> Steps { get; set; }
     }
 }

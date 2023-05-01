@@ -1,23 +1,12 @@
-﻿using IntegrationTests.requestBuilders;
+﻿using IntegrationTests.BaseTests;
 using Microsoft.AspNetCore.Mvc.Testing;
-using System.Text.Json;
-using TaskIt.Api.Dtos.Input;
-using TaskIt.Api.Dtos.Output;
 
 namespace IntegrationTests.Tasks
 {
-    public class DeleteTasks : IClassFixture<WebApplicationFactory<Program>>, IAsyncDisposable
+    public class DeleteTasks : TestBase, IClassFixture<WebApplicationFactory<Program>>, IAsyncDisposable
     {
-        private const string TASK_TITLE = "Katten bak schoonmaken";
-        private const string TASK_URL = "Task";
-
-        private readonly WebApplicationFactory<Program> _factory;
-        private readonly HttpClient _client;
-
-        public DeleteTasks(WebApplicationFactory<Program> factory)
+        public DeleteTasks(WebApplicationFactory<Program> factory): base(factory)
         {
-            _factory = factory;
-            _client = _factory.CreateClient();
         }
 
         public async ValueTask DisposeAsync()
@@ -69,27 +58,6 @@ namespace IntegrationTests.Tasks
 
             //Assert
             Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
-        }
-
-
-        private async Task<Guid> PostNewTask(DateTime endDate, string title)
-        {
-            var taskCreateData = new TaskCreateRequestBuilder()
-                .WithTitle(title)
-                .WithEndDate(endDate)
-                .Create();
-
-            using StringContent httpContentString = new HttpStringContentBuilder<TaskCreateRequestDto>()
-                .WithMediaTypeAplicationJson()
-                .WithEndocdingUTF8()
-                .WithContent(taskCreateData)
-            .Create();
-
-            var responseCreateRequest = await _client.PostAsync(TASK_URL, httpContentString);
-
-            var responseBody = await responseCreateRequest.Content.ReadAsStringAsync();
-            var createdTaskItem = JsonSerializer.Deserialize<TaskItemDto>(responseBody);
-            return createdTaskItem.Id;
         }
     }
 }

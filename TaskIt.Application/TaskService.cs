@@ -75,9 +75,11 @@ namespace UnitTests
             return steps;
         }
 
-        public async Task<TaskItem?> GetByIdAsync(Guid Id)
+        public async Task<TaskItem?> GetByIdAsync(Guid TaskId)
         {
-           return await _taskRepository.GetByIdAsync(Id);
+           var task = await _taskRepository.GetByIdAsync(TaskId);
+            task.Steps = await GetAllStepsForTaskAsync(TaskId);
+            return task;
         }
 
         public async Task<Step?> GetStepByIdAsync(Guid id)

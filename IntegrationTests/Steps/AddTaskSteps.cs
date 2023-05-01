@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
+using IntegrationTests.BaseTests;
 using IntegrationTests.requestBuilders;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Text.Json;
@@ -9,19 +9,10 @@ using TaskIt.Api.Dtos.Output;
 
 namespace IntegrationTests.Steps
 {
-    public class AddTaskSteps : IClassFixture<WebApplicationFactory<Program>>, IAsyncDisposable
+    public class AddTaskSteps : TestBase, IClassFixture<WebApplicationFactory<Program>>, IAsyncDisposable
     {
-        private const string TASK_TITLE = "Katten bak schoonmaken";
-        private const string TASK_URL = "Task";
-
-        private readonly WebApplicationFactory<Program> _factory;
-
-        private readonly HttpClient _client;
-
-        public AddTaskSteps(WebApplicationFactory<Program> factory)
+        public AddTaskSteps(WebApplicationFactory<Program> factory): base(factory)
         {
-            _factory = factory;
-            _client = _factory.CreateClient();
         }
 
         public async ValueTask DisposeAsync()
@@ -49,32 +40,12 @@ namespace IntegrationTests.Steps
                                                             .WithContent(stepCreateData)
                                                             .Create();
 
-            var responseCreateRequest = await _client.PostAsync(TASK_URL, httpContentString);
+            var responseCreateRequest = await _client.PostAsync(STEP_URL, httpContentString);
 
             var responseBody = await responseCreateRequest.Content.ReadAsStringAsync();
             var createdStepItem = JsonSerializer.Deserialize<TaskItemDto>(responseBody);
 
             responseCreateRequest.StatusCode.Should().Be(HttpStatusCode.Created);
-        }
-
-        private async Task<Guid> PostNewTask(DateTime endDate, string title)
-        {
-            var taskCreateData = new TaskCreateRequestBuilder()
-                .WithTitle(title)
-                .WithEndDate(endDate)
-                .Create();
-
-            using StringContent httpContentString = new HttpStringContentBuilder<TaskCreateRequestDto>()
-                .WithMediaTypeAplicationJson()
-                .WithEndocdingUTF8()
-                .WithContent(taskCreateData)
-            .Create();
-
-            var responseCreateRequest = await _client.PostAsync(TASK_URL, httpContentString);
-
-            var responseBody = await responseCreateRequest.Content.ReadAsStringAsync();
-            var createdTaskItem = JsonSerializer.Deserialize<TaskItemDto>(responseBody);
-            return createdTaskItem.Id;
         }
     }
 }

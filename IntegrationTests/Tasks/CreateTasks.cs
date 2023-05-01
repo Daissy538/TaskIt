@@ -1,24 +1,15 @@
 using FluentAssertions;
+using IntegrationTests.BaseTests;
 using IntegrationTests.requestBuilders;
 using Microsoft.AspNetCore.Mvc.Testing;
 using TaskIt.Api.Dtos.Input;
 
 namespace IntegrationTests.Tasks
 {
-    public class CreateTasks : IClassFixture<WebApplicationFactory<Program>>, IAsyncDisposable
+    public class CreateTasks : TestBase, IClassFixture<WebApplicationFactory<Program>>, IAsyncDisposable
     {
-        private const string TASK_TITLE = "Katten bak schoonmaken";
-
-        private const string TASK_URL = "Task";
-
-        private readonly WebApplicationFactory<Program> _factory;
-
-        private readonly HttpClient _client;
-
-        public CreateTasks(WebApplicationFactory<Program> factory)
+        public CreateTasks(WebApplicationFactory<Program> factory): base(factory)
         {
-            _factory = factory;
-            _client = _factory.CreateClient();
         }
 
         public async ValueTask DisposeAsync()
