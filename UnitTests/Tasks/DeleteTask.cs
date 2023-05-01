@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using TaskIt.Adapter.Fakes;
+using TaskIt.Application;
 using TaskIt.Core.Request.Builder;
 
 namespace UnitTests.Tasks

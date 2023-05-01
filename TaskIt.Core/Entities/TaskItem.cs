@@ -21,6 +21,6 @@ namespace TaskIt.Core.Entities
         [StringLength(100, MinimumLength = 1)]
         public string Title { get; set; }
         public DateTime? EndDate { get; set; }
-        public List<Step> Steps { get; set; }
+        public List<Step> Steps { get; set; } = new List<Step>();
     }
 }

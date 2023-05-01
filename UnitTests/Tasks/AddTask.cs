@@ -2,6 +2,7 @@
 using TaskIt.Core.Exceptions;
 using TaskIt.Core.Request.Builder;
 using TaskIt.Adapter.Fakes;
+using TaskIt.Application;
 
 namespace UnitTests.Tasks
 {

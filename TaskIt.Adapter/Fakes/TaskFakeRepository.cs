@@ -34,7 +34,7 @@ namespace TaskIt.Adapter.Fakes
             return Tasks.Values.ToList();
         }
 
-        public async Task<TaskItem> GetByIdAsync(Guid id)
+        public async Task<TaskItem?> GetByIdAsync(Guid id)
         {
             var repsonse = Tasks.SingleOrDefault(t => t.Key == id);
             return repsonse.Value;

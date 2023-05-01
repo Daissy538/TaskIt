@@ -2,12 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using TaskIt.Adapter.SQL.Context;
 using TaskIt.Adapter.SQL.Steps;
 using TaskIt.Adapter.SQL.Tasks;
+using TaskIt.Application;
 using TaskIt.Application.Ports.RepositoryInterfaces;
 using TaskIt.Core;
-using UnitTests;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -19,7 +18,7 @@ builder.Services.AddTransient<ITaskService, TaskService>();
 builder.Services.AddTransient<ITaskRepository, TaskRepository>();
 builder.Services.AddTransient<IStepRepository, StepsRepository>();
 
-builder.Services.AddDbContext<TaskItSQLDbContext>(options => options.UseSqlServer("Data Source=.\\SQLEXPRESS; Database=TaskIt;TrustServerCertificate=True;Integrated Security=True"));
+builder.Services.AddDbContext<TaskItSQLDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQL")));
 
 var app = builder.Build();
 
