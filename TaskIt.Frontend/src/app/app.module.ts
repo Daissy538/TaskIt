@@ -3,7 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ListModule } from './Core/List/list.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TaskModule } from './Components/Task/task.module';
+import { HttpClientModule } from '@angular/common/http';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -11,8 +14,11 @@ import { ListModule } from './Core/List/list.module';
   ],
   imports: [
     BrowserModule,
-    ListModule,
-    AppRoutingModule
+    HttpClientModule,
+    MatToolbarModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    TaskModule
   ],
   providers: [],
   bootstrap: [AppComponent]

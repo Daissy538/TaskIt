@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { ListComponent } from './Core/List/list.component';
+import { TaskComponent } from './Components/Task/List/tasks.component';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -8,7 +8,7 @@ describe('AppComponent', () => {
 
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
-    declarations: [AppComponent, ListComponent]
+    declarations: [AppComponent, TaskComponent]
   }));
 
   it('should create the app', () => {
