@@ -7,10 +7,10 @@ import { TaskAdapterService } from 'src/app/Infrastructure/task-adapter.service'
   providedIn: 'root'
 })
 export class TaskService {
-
   constructor(private taskAdapterService:  TaskAdapterService) { }
 
   public getTasks(): Observable<Task[]>{
+
     return this.taskAdapterService.getTasks();
   }
 }

@@ -7,11 +7,11 @@ namespace TaskIt.Core.Request
         public string Title { get; set; }
         public DateTime? EndDate { get; set; }
 
-        public void VerifyEndDate()
+        public void VerifyEndDate(DateTime currentDate)
         {
             if (EndDate.HasValue)
             {
-                var endDateInThePast = EndDate.Value.Date < DateTime.UtcNow.Date;
+                var endDateInThePast = EndDate.Value.Date < currentDate.Date;
 
                 if (endDateInThePast)
                 {

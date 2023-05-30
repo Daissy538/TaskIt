@@ -2,7 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using TaskIt.Adapter.SQL.Context;
 using TaskIt.Adapter.SQL.Steps;
 using TaskIt.Adapter.SQL.Tasks;
+using TaskIt.Adapter.System;
 using TaskIt.Application;
+using TaskIt.Application.Driven_Ports;
 using TaskIt.Application.Ports.RepositoryInterfaces;
 using TaskIt.Core;
 
@@ -15,12 +17,26 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<ITaskService, TaskService>();
+
+builder.Services.AddTransient<ISystemDateTimeClient, SystemDateTimeClient>();
+
 builder.Services.AddTransient<ITaskRepository, TaskRepository>();
 builder.Services.AddTransient<IStepRepository, StepsRepository>();
 
 builder.Services.AddDbContext<TaskItSQLDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQL")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "Website",
+                      policy =>
+                      {
+                          policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                      });
+});
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -30,6 +46,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("Website");
 
 app.UseAuthorization();
 

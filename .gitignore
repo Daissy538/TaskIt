@@ -25,3 +25,5 @@
 /TaskIt.Adapter.SQL/obj
 /TaskIt.Frontend/.vscode
 *.editorconfig
+/TaskIt.Adapter.System/bin/Debug/net7.0
+/TaskIt.Adapter.System/obj

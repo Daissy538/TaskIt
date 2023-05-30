@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using TaskIt.Adapter.Fake.Fakes;
 using TaskIt.Adapter.Fakes;
 using TaskIt.Application;
 using TaskIt.Core.Entities;
@@ -11,24 +12,26 @@ namespace UnitTests.Tasks
         private const string TASK_TITLE = "Katten bak schoonmaken";
         private const string STEP_TITLE = "Step 1";
         private const string STEP_DESCRIPTION = "Cleaning the servace";
+        private const string CURRENT_DATETIME = "2011-03-21 13:26";
 
         private TaskService taskService;
         private TaskFakeRepository taskFakeRepository;
         private StepFakeRepository stepFakeRepository;
+        private SystemDateTimeClient systemDateTimeClient;
 
         public RetrieveTasks()
         {
             taskFakeRepository = new TaskFakeRepository();
             stepFakeRepository = new StepFakeRepository();
-            taskService = new TaskService(taskFakeRepository, stepFakeRepository);
+            systemDateTimeClient = new SystemDateTimeClient(CURRENT_DATETIME);
+            taskService = new TaskService(taskFakeRepository, stepFakeRepository, systemDateTimeClient);
         }
 
         [Fact]
         public async void Retrieve_Task_Details()
         {
             TaskItem task;
-            taskService = new TaskService(new TaskFakeRepository(), stepFakeRepository);
-                var currentDateTime = DateTime.UtcNow;
+            var currentDateTime = systemDateTimeClient.GetCurrentDateTimeUTC();
 
             var request = new CreateTaskRequestBuilder()
             .WithTitle(TASK_TITLE)
@@ -51,7 +54,7 @@ namespace UnitTests.Tasks
 
             var task2 = new CreateTaskRequestBuilder()
                                     .WithTitle(TASK_TITLE)
-                                    .WithEndDate(DateTime.UtcNow)
+                                    .WithEndDate(currentDateTime)
                                                     .Build();
 
 

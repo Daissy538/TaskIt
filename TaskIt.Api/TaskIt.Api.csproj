@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskIt.Adapter.SQL\TaskIt.Adapter.SQL.csproj" />
-    <ProjectReference Include="..\TaskIt.Adapter\TaskIt.Adapter.Fake.csproj" />
+    <ProjectReference Include="..\TaskIt.Adapter.System\TaskIt.Adapter.System.csproj" />
     <ProjectReference Include="..\TaskIt.Application\TaskIt.Application.csproj" />
   </ItemGroup>
 </Project>

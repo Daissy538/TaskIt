@@ -4,6 +4,8 @@ using TaskIt.Core.Entities;
 using TaskIt.Core.Request.Builder;
 using TaskIt.Adapter;
 using TaskIt.Adapter.Fakes;
+using TaskIt.Application;
+using TaskIt.Adapter.Fake.Fakes;
 
 namespace UnitTests.Step
 {
@@ -12,8 +14,10 @@ namespace UnitTests.Step
         private const string TASK_TITLE = "Katten bak schoonmaken";
         private const string STEP_TITLE = "Step 1";
         private const string STEP_DESCRIPTION = "Cleaning the servace";
+        private const string CURRENT_DATETIME = "2011-03-21 13:26";
 
         private StepFakeRepository stepFakeRepository;
+        private SystemDateTimeClient systemDateTimeClient;
         private ITaskService taskService;
         private TaskItem task;
 
@@ -25,8 +29,9 @@ namespace UnitTests.Step
         public async Task InitializeAsync()
         {
             stepFakeRepository = new StepFakeRepository();
+            systemDateTimeClient = new SystemDateTimeClient(CURRENT_DATETIME);
 
-            taskService = new TaskService(new TaskFakeRepository(), stepFakeRepository);
+            taskService = new TaskService(new TaskFakeRepository(), stepFakeRepository, systemDateTimeClient);
             var currentDateTime = DateTime.UtcNow;
 
             var request = new CreateTaskRequestBuilder()

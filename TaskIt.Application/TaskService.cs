@@ -1,4 +1,5 @@
-﻿using TaskIt.Application.Ports.RepositoryInterfaces;
+﻿using TaskIt.Application.Driven_Ports;
+using TaskIt.Application.Ports.RepositoryInterfaces;
 using TaskIt.Core;
 using TaskIt.Core.Entities;
 using TaskIt.Core.Request;
@@ -9,11 +10,13 @@ namespace TaskIt.Application
     {
         private readonly ITaskRepository _taskRepository;
         private readonly IStepRepository _stepRepository;
+        private readonly ISystemDateTimeClient _systemDateTimeClient;
 
-        public TaskService(ITaskRepository taskRepository, IStepRepository stepRepository)
+        public TaskService(ITaskRepository taskRepository, IStepRepository stepRepository, ISystemDateTimeClient systemDateTimeClient)
         {
             _taskRepository = taskRepository;
             _stepRepository = stepRepository;
+            _systemDateTimeClient = systemDateTimeClient;
         }
 
         public async Task<Step> AddStepToTaskAsync(CreateStepRequest createStepRequest)
@@ -28,7 +31,7 @@ namespace TaskIt.Application
 
         public async Task<TaskItem> CreateTaskAsync(CreateTaskRequest createTaskRequest)
         {
-            createTaskRequest.VerifyEndDate();
+            createTaskRequest.VerifyEndDate(_systemDateTimeClient.GetCurrentDateTimeUTC());
 
             TaskItem item = new TaskItem(createTaskRequest.Title, createTaskRequest.EndDate);
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Task } from 'src/app/Domain/task';
+import { TaskService } from '../task.service';
 
 @Component({
   selector: 'tasks',
@@ -17,7 +18,7 @@ export class TaskComponent implements OnInit{
     return this._tasks;
   }
 
-  constructor() {
+  constructor(private _taskService:TaskService) {
     this._tasks = [];
     this._displayedColumns = ['title', 'description', 'endDate'];
 
@@ -28,7 +29,10 @@ export class TaskComponent implements OnInit{
   }
 
   private getTasks(): void {
-    this._tasks.push(new Task('TestTitle', 'Test fdsfsdf', new Date()));
+    this._taskService.getTasks()
+    .subscribe((response) => {
+      this._tasks = response;
+    });
   }
 
 
