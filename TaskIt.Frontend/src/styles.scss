@@ -1,7 +1,7 @@
-@use "./assets/styles/colors";
+@import "./assets/styles/colors";
+@import "./assets/styles/sizes";
+@import "./assets/styles/components";
 
 body {
   margin: 0;
 }
-
-

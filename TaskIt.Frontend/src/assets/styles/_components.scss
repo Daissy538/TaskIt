@@ -1,0 +1,35 @@
+.card {
+    background-color: $card-color;
+    width: fit-content;
+    padding: 25px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 300px;
+    .header {
+      font-size: medium;
+      font-weight: bolder;
+      color: $title-color;
+      padding: 5px;
+      border-bottom: 0.5px solid $title-color;;
+    }
+    .content {
+      padding: 5px;
+      margin-top: 10px;
+      .details{
+        display: flex;
+        flex-direction: column;
+        .details-row{
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          color: white;
+          .label {
+            font-weight: bold;
+          }
+          .value {
+          }
+        }
+      }
+    }
+}

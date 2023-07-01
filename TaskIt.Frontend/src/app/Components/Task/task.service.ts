@@ -13,4 +13,8 @@ export class TaskService {
 
     return this.taskAdapterService.getTasks();
   }
+
+  public getTask(taskId: string): Observable<Task>{
+    return this.taskAdapterService.getTask(taskId);
+  }
 }

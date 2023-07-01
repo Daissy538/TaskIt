@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+
 import { Task } from 'src/app/Domain/task';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { EnvironmentService } from '../shared/environment.service';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,11 @@ export class TaskAdapterService{
   public getTasks(): Observable<Task[]> {
     let request = this._httpClient.get<Task[]>(this.servcerURL + '/all');
 
+    return request;
+  }
+
+  public getTask(taskId: string): Observable<Task>{
+    let request = this._httpClient.get<Task>(this.servcerURL + '/'+ taskId);
     return request;
   }
 }

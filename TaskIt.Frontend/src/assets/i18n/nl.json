@@ -1,0 +1,12 @@
+{
+  "MENU":{
+    "TITLE": "TaskIT"
+  },
+  "GENERAL": {
+    "TITLE": "Titel",
+    "DESCRIPTION": "Omschrijving",
+    "END_DATE": "Einddatum",
+    "TASK": "Taak",
+    "TASKS": "Taken"
+  }
+}
