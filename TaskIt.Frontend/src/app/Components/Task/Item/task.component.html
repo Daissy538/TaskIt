@@ -12,6 +12,10 @@
         <div class="label">{{ 'GENERAL.DESCRIPTION' | translate }}</div>
         <div class="value">{{task?.title}}</div>
       </div>
+      <div class="details-row">
+        <div class="label">{{ 'GENERAL.END_DATE' | translate }}</div>
+        <div class="value">{{task?.endDate | date:'dd-MM-YYYY HH:mm'}}</div>
+      </div>
     </div>
   </div>
 </div>

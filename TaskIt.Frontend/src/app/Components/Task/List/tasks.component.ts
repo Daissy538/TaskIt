@@ -1,8 +1,6 @@
 import { Task } from 'src/app/Domain/task';
 import { TaskService } from '../task.service';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'tasks',
@@ -15,19 +13,23 @@ export class TasksComponent implements OnInit, OnDestroy{
 
   @Input()
   public heigth: number | undefined;
+
+  @Output()
+  public taskSelected: EventEmitter<Task>;
+
   private readonly _displayedColumns: string[];
   public get displayedColumns(): string[]{
-    return this._displayedColumns;
+    return structuredClone(this._displayedColumns);
   }
 
   private _tasks: Task[];
   public get tasks(): Task[]{
-    return this._tasks;
+    return structuredClone(this._tasks);
   }
 
-  constructor(private _taskService:TaskService,
-              private _router: Router) {
+  constructor(private _taskService:TaskService) {
     this._tasks = [];
+    this.taskSelected = new EventEmitter<Task>();
     this._displayedColumns = ['title', 'description', 'endDate'];
 
   }
@@ -39,8 +41,8 @@ export class TasksComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
   }
 
-  public openTask(task: Task): void {
-    this._router.navigate(['/task/', task.id]);
+  public onTaskSelected(task: Task): void {
+    this.taskSelected.emit(structuredClone(task));
   }
 
   private getTasks(): void {

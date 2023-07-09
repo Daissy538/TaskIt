@@ -23,7 +23,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatToolbarModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    TaskModule,
     TranslateModule.forRoot({
       defaultLanguage: 'nl',
       loader: {
